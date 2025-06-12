@@ -2,15 +2,15 @@ name: "Building my First Resource"
 
 # This step ensures that the GitHub Actions workflow will only run when code is pushed (commited) to branches that begin with feature/ or fix/
 on:
-  workflow_call:
-    inputs:
-      environment:
-        type: string
-        required: true
+  push:
+    branches:
+      - 'feature/*'
+      - 'fix/*'
 
 jobs:
-  terraform:
+  dev-deploy:
     name: "Terraform Deploy"
+
     # This tells GitHub Actions to run this job on a virtual machine using the latest Ubuntu Linux runner.
     runs-on: ubuntu-latest
 
@@ -39,8 +39,7 @@ jobs:
       # Optional: Terraform init with backend config
       - name: Terraform Init
         working-directory: ./
-        run: |
-          cd infra && terraform init -backend-config="bucket=ph-github-state" -backend-config="key=terraform.tfstate"
+        run: terraform init -backend-config="bucket=ph-github-state" -backend-config="key=terraform.tfstate"
 
       - name: Terraform Validate
         run: terraform validate
@@ -49,4 +48,4 @@ jobs:
         run: terraform fmt
 
       - name: Terraform Plan
-        run: cd infra && terraform plan
+        run: terraform plan
