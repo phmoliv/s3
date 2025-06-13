@@ -4,8 +4,7 @@ name: "STG DEPLOY"
 on:
   push:
     branches:
-      - 'feature/*'
-      - 'fix/*'
+      - dev
   
   pull_request:
     branches:
