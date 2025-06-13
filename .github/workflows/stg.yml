@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   terraform:
-    uses: ./.github/workflows/terraform.yml
+    uses: ./.github/workflows/terraform-stg.yml
     with:
       environment: stg
       aws-assume-role-arn: "arn:aws:iam::408812097574:role/ph-github-actions-role"
