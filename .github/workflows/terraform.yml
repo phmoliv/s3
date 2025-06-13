@@ -27,16 +27,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check if the pushed branch is a valid feature or fix branch
+      - name: Validate branch name
         id: check_branch
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          if [[ ! "$BRANCH_NAME" =~ ^(feature|fix)/ ]]; then
-            echo "The pushed branch '$BRANCH_NAME' is not valid (must start with 'feature/' or 'fix/')."
-            exit 1
-          else
-            echo "Valid branch: $BRANCH_NAME"
-          fi  
+          VALID_PREFIXES="feature/ fix/"
+    
+          for PREFIX in $VALID_PREFIXES; do
+            if [[ "$BRANCH_NAME" == $PREFIX* ]]; then
+              echo "Valid branch: $BRANCH_NAME"
+              exit 0
+            fi
+          done
+
+          echo "Invalid branch name '$BRANCH_NAME'. It must start with one of: $VALID_PREFIXES"
+          exit 1  
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
