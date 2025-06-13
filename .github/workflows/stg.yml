@@ -2,10 +2,6 @@ name: "STG DEPLOY"
 
 # This step ensures that the GitHub Actions workflow will only run when code is pushed (commited) to branches that begin with feature/ or fix/
 on:
-  push:
-    branches:
-      - dev
-  
   pull_request:
     branches:
       - dev
