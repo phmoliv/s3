@@ -1,0 +1,21 @@
+name: "DEV DEPLOY"
+
+# This step ensures that the GitHub Actions workflow will only run when code is pushed (commited) to branches that begin with feature/ or fix/
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'fix/*'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    with:
+      environment: dev
+      aws-assume-role-arn: "arn:aws:iam::408812097574:role/ph-github-actions-role"
+      aws-region: "sa-east-1"
+      aws-statefile-s3-bucket: "ph-github-state"
