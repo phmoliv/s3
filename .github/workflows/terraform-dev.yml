@@ -72,17 +72,3 @@ jobs:
         id: terraform-plan
         run: cd infra &&
           terraform plan -var-file="./envs/${{ inputs.environment }}/terraform.tfvars" -out="${{ inputs.environment }}.plan"
-
-      - name: Get the branch name
-        id: get_branch
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-      
-      - name: Create a pull request for FEATURE
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "Automated Pull Request"
-          body: "This is an automatically generated pull request."
-          base: dev  # The branch where the PR will be merged into
-          head: ${{ env.BRANCH_NAME }}  # Dynamically use the current branch name  
-
