@@ -27,22 +27,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Validate branch name
-        id: check_branch
-        run: |
-          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          VALID_PREFIXES="feature/ fix/"
-    
-          for PREFIX in $VALID_PREFIXES; do
-            if [[ "$BRANCH_NAME" == $PREFIX* ]]; then
-              echo "Valid branch: $BRANCH_NAME"
-              exit 0
-            fi
-          done
-
-          echo "Invalid branch name '$BRANCH_NAME'. It must start with one of: $VALID_PREFIXES"
-          exit 1  
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -72,4 +56,3 @@ jobs:
         id: terraform-plan
         run: cd infra &&
           terraform plan -var-file="./envs/${{ inputs.environment }}/terraform.tfvars" -out="${{ inputs.environment }}.plan"
-
